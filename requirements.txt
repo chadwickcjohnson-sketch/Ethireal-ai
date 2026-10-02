@@ -1,0 +1,165 @@
+# Ethireal AI
+
+Automation in full.
+
+Ethireal AI is an AI-native business automation platform designed to help founders, executives, teams, and operators automate the real work of running a business. It connects AI orchestration, workflow automation, natural-language task execution, business context, and operational reporting into one operational layer.
+
+This repository now defines a working foundation for a full operational workflow: orchestration, automation, task execution, workflow templates, and a service-ready architecture for scaling into a business product.
+
+## Product vision
+
+Ethireal AI turns fragmented business operations into a cohesive execution system. It supports:
+- executive briefing and leadership workflows
+- sales pipeline automation
+- support triage and response flows
+- internal operations coordination
+- reporting, summaries, and action tracking
+- intelligent business process orchestration
+
+## Core platform concept
+
+The platform is designed to operate as a business operating system with layers for:
+- AI orchestration
+- workflow execution
+- event and task routing
+- context and memory
+- reporting and executive visibility
+
+## Operational workflow model
+
+Ethireal AI includes workflow-based automation patterns such as:
+- executive briefing workflow
+- sales lead qualification workflow
+- customer support triage workflow
+- internal ops task coordination workflow
+- reporting and ROI summary workflow
+
+## Repository structure
+
+```text
+app/
+  main.py
+  config.py
+  models.py
+  workflows.py
+  services/
+    automation.py
+    reporting.py
+
+docs/
+  architecture.md
+  roadmap.md
+  monetization.md
+  operations.md
+
+requirements.txt
+Dockerfile
+compose.yaml
+.env.example
+Makefile
+```
+
+## Quick start
+
+### 1) Create a virtual environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 2) Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3) Run the API
+
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 4) Test the health endpoint
+
+```bash
+curl http://localhost:8000/health
+```
+
+## API overview
+
+### Health
+
+```bash
+GET /health
+```
+
+### List available workflows
+
+```bash
+GET /workflows
+```
+
+### Run a workflow
+
+```bash
+POST /workflows/executive_brief
+{
+  "owner": "ceo",
+  "context": {
+    "team": "leadership",
+    "business_focus": "growth and efficiency",
+    "priorities": ["pipeline", "operations", "customer retention"]
+  }
+}
+```
+
+### Get workflow status
+
+```bash
+GET /workflows/{workflow_id}/status
+```
+
+## Example workflows
+
+### Executive brief
+- summarize priorities
+- assess operations risk
+- generate key actions
+
+### Sales pipeline orchestration
+- score leads
+- assign next-step actions
+- monitor follow-up cadence
+
+### Support triage
+- classify requests
+- assign severity
+- route to the appropriate team
+
+## Product positioning
+
+Ethireal AI is designed to become:
+- an AI operations dashboard
+- a business workflow engine
+- a virtual leadership assistant
+- a revenue-generating AI automation platform
+
+## Monetization model
+
+Recommended strategy:
+- hosted SaaS
+- premium enterprise automation
+- white-label deployment
+- consulting and onboarding services
+- custom workflow design for founders and teams
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+
+## Summary
+
+This repo now includes a proper foundation for a real operational AI workflow system with an executable backend, workflow templates, and a modern service architecture that can scale into a concrete business product.
+
+Built for automation. Built for scale. Built for execution.
