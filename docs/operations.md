@@ -1,16 +1,29 @@
-run:
-	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# Ethireal AI Monetization Strategy
 
-install:
-	python -m pip install -r requirements.txt
+## Primary revenue streams
 
-check:
-	python -m compileall app
+1. SaaS subscriptions
+2. enterprise onboarding packages
+3. custom workflow implementation
+4. white-label licensing
+5. automation consulting
+6. premium support and maintenance
 
-help:
-	@echo "Available commands:"
-	@echo "  make install"
-	@echo "  make run"
-	@echo "  make check"
+## Recommended model
 
-.PHONY: run install check help
+- open public framework where appropriate
+- charge for hosted access and premium features
+- sell enterprise deployment and custom business logic
+- provide white-label services for agencies and consultants
+
+## Ideal customer segments
+
+- founders and small business owners
+- agencies
+- operations teams
+- sales and support teams
+- executive assistants and leadership teams
+
+## Strategic advantage
+
+Ethireal AI is stronger as a business automation platform than as just a generic chatbot. The value is in operational execution and process leverage.

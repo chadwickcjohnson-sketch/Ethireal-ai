@@ -1,165 +1,98 @@
-# Ethireal AI
+from __future__ import annotations
 
-Automation in full.
+from typing import Any, Dict, List
 
-Ethireal AI is an AI-native business automation platform designed to help founders, executives, teams, and operators automate the real work of running a business. It connects AI orchestration, workflow automation, natural-language task execution, business context, and operational reporting into one operational layer.
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 
-This repository now defines a working foundation for a full operational workflow: orchestration, automation, task execution, workflow templates, and a service-ready architecture for scaling into a business product.
+from app.config import APP_DEBUG, APP_HOST, APP_NAME, APP_PORT
+from app.services.automation import AutomationOrchestrator
+from app.services.reporting import ReportingService
+from app.workflows import build_workflow_instance, list_workflows
 
-## Product vision
+app = FastAPI(
+    title=APP_NAME,
+    version="0.1.0",
+    description="Ethireal AI operational workflow engine.",
+    debug=APP_DEBUG,
+)
 
-Ethireal AI turns fragmented business operations into a cohesive execution system. It supports:
-- executive briefing and leadership workflows
-- sales pipeline automation
-- support triage and response flows
-- internal operations coordination
-- reporting, summaries, and action tracking
-- intelligent business process orchestration
+orchestrator = AutomationOrchestrator()
+reporting = ReportingService()
+workflow_history: List[Dict[str, Any]] = []
 
-## Core platform concept
 
-The platform is designed to operate as a business operating system with layers for:
-- AI orchestration
-- workflow execution
-- event and task routing
-- context and memory
-- reporting and executive visibility
+class WorkflowRequest(BaseModel):
+    owner: str = Field(..., description="Owner or team responsible for the workflow.")
+    context: Dict[str, Any] = Field(default_factory=dict, description="Workflow context and execution data.")
 
-## Operational workflow model
 
-Ethireal AI includes workflow-based automation patterns such as:
-- executive briefing workflow
-- sales lead qualification workflow
-- customer support triage workflow
-- internal ops task coordination workflow
-- reporting and ROI summary workflow
+@app.get("/health")
+def health() -> Dict[str, Any]:
+    return {
+        "status": "ok",
+        "service": APP_NAME,
+        "mode": "operational",
+    }
 
-## Repository structure
 
-```text
-app/
-  main.py
-  config.py
-  models.py
-  workflows.py
-  services/
-    automation.py
-    reporting.py
+@app.get("/workflows")
+def get_workflows() -> Dict[str, Any]:
+    return {"workflows": list_workflows()}
 
-docs/
-  architecture.md
-  roadmap.md
-  monetization.md
-  operations.md
 
-requirements.txt
-Dockerfile
-compose.yaml
-.env.example
-Makefile
-```
+@app.post("/workflows/{workflow_name}")
+def run_workflow(workflow_name: str, payload: WorkflowRequest) -> Dict[str, Any]:
+    try:
+        workflow = build_workflow_instance(workflow_name, payload.owner, payload.context)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
 
-## Quick start
+    workflow = orchestrator.run(workflow)
+    workflow_history.append({
+        "workflow_id": workflow.workflow_id,
+        "workflow_name": workflow.workflow_name,
+        "owner": workflow.owner,
+        "status": workflow.status,
+    })
 
-### 1) Create a virtual environment
+    return {
+        "workflow_id": workflow.workflow_id,
+        "status": workflow.status,
+        "summary": workflow.result,
+    }
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-```
 
-### 2) Install dependencies
+@app.get("/workflows/{workflow_id}/status")
+def workflow_status(workflow_id: str) -> Dict[str, Any]:
+    workflow = orchestrator.execution_log.get(workflow_id)
+    if workflow is None:
+        raise HTTPException(status_code=404, detail="Workflow not found")
 
-```bash
-pip install -r requirements.txt
-```
+    return {
+        "workflow_id": workflow.workflow_id,
+        "workflow_name": workflow.workflow_name,
+        "owner": workflow.owner,
+        "status": workflow.status,
+        "steps": [
+            {
+                "name": step.name,
+                "action": step.action,
+                "status": step.status,
+                "details": step.details,
+            }
+            for step in workflow.steps
+        ],
+        "result": workflow.result,
+    }
 
-### 3) Run the API
 
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+@app.get("/dashboard")
+def dashboard() -> Dict[str, Any]:
+    return reporting.dashboard_summary(workflow_history)
 
-### 4) Test the health endpoint
 
-```bash
-curl http://localhost:8000/health
-```
+if __name__ == "__main__":
+    import uvicorn
 
-## API overview
-
-### Health
-
-```bash
-GET /health
-```
-
-### List available workflows
-
-```bash
-GET /workflows
-```
-
-### Run a workflow
-
-```bash
-POST /workflows/executive_brief
-{
-  "owner": "ceo",
-  "context": {
-    "team": "leadership",
-    "business_focus": "growth and efficiency",
-    "priorities": ["pipeline", "operations", "customer retention"]
-  }
-}
-```
-
-### Get workflow status
-
-```bash
-GET /workflows/{workflow_id}/status
-```
-
-## Example workflows
-
-### Executive brief
-- summarize priorities
-- assess operations risk
-- generate key actions
-
-### Sales pipeline orchestration
-- score leads
-- assign next-step actions
-- monitor follow-up cadence
-
-### Support triage
-- classify requests
-- assign severity
-- route to the appropriate team
-
-## Product positioning
-
-Ethireal AI is designed to become:
-- an AI operations dashboard
-- a business workflow engine
-- a virtual leadership assistant
-- a revenue-generating AI automation platform
-
-## Monetization model
-
-Recommended strategy:
-- hosted SaaS
-- premium enterprise automation
-- white-label deployment
-- consulting and onboarding services
-- custom workflow design for founders and teams
-
-## License
-
-This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
-
-## Summary
-
-This repo now includes a proper foundation for a real operational AI workflow system with an executable backend, workflow templates, and a modern service architecture that can scale into a concrete business product.
-
-Built for automation. Built for scale. Built for execution.
+    uvicorn.run("app.main:app", host=APP_HOST, port=APP_PORT, reload=APP_DEBUG)

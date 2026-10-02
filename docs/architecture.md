@@ -1,37 +1,16 @@
-# OS and editor files
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+run:
+	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# Environment files
-.env
-.env.*
+install:
+	python -m pip install -r requirements.txt
 
-# Logs
-*.log
-logs/
+check:
+	python -m compileall app
 
-# Python
-__pycache__/
-*.py[cod]
-venv/
-.venv/
-.python-version
+help:
+	@echo "Available commands:"
+	@echo "  make install"
+	@echo "  make run"
+	@echo "  make check"
 
-# Node / frontend
-node_modules/
-.next/
-out/
-build/
-dist/
-.npm/
-
-# Test and coverage
-coverage/
-.pytest_cache/
-
-# Misc
-*.tmp
-*.bak
-*.swp
+.PHONY: run install check help

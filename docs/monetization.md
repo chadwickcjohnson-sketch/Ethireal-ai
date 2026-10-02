@@ -1,41 +1,30 @@
 # Ethireal AI Roadmap
 
 ## Phase 1 — Foundation
-- define product vision and business model
-- identify key workflow categories
-- create architecture blueprint
-- design core modules and agent roles
-- validate user pain points
+- define workflows and business use cases
+- design architecture and modular services
+- build workflow execution engine
+- create dashboard and status APIs
 
 ## Phase 2 — MVP
-- build basic workflow engine
-- create AI task planner
-- define automation templates
-- connect sample integrations
-- implement dashboard basics
+- add real integrations
+- implement workflow templates for operations and support
+- create user and team context model
+- improve workflow analytics
 
-## Phase 3 — Business workflows
-- sales automation flows
-- support automation flows
-- executive summary generation
-- internal operations assistant
-- reporting engine
-
-## Phase 4 — Scale and optimization
+## Phase 3 — Scaling
 - multi-agent orchestration
-- context memory and personalization
-- analytics and ROI tracking
-- expanded enterprise integrations
+- business memory and personalization
+- advanced reporting
+- deployment automation
 
-## Phase 5 — Commercialization
-- SaaS launch
-- premium tiers
-- enterprise onboarding
-- partner and white-label distribution
-- implementation services
+## Phase 4 — Commercialization
+- hosted SaaS launch
+- enterprise setup and onboarding
+- white-label distribution
+- premium support and consulting
 
-## Success criteria
-- reduced manual workflow load
-- improved speed of execution
+## Success metrics
+- reduced manual operations load
+- faster execution across workflows
 - measurable business automation ROI
-- strong product-market fit in founder and small-business segments
