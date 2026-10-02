@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SERVICE_PATH="/etc/systemd/system/ethireal-ai.service"
+
+cat > "$SERVICE_PATH" <<EOF
+[Unit]
+Description=Ethireal AI self-starting service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=${ROOT_DIR}
+Environment=APP_ENV=development
+Environment=APP_DEBUG=true
+Environment=APP_HOST=0.0.0.0
+Environment=APP_PORT=8000
+ExecStart=${ROOT_DIR}/scripts/start.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable --now ethireal-ai.service
+systemctl status ethireal-ai.service --no-pager

@@ -1,18 +1,16 @@
-# Ethireal AI Monetization Strategy
+run:
+	./scripts/start.sh
 
-## Revenue model
+install:
+	python3 -m pip install -r requirements.txt
 
-- SaaS subscriptions
-- premium hosted plan
-- enterprise deployment
-- custom workflow services
-- support and implementation retainer
-- white-label licensing
+check:
+	python3 -m compileall app scripts
 
-## Target segments
+help:
+	@echo "Available commands:"
+	@echo "  make install"
+	@echo "  make run"
+	@echo "  make check"
 
-- founders
-- agencies
-- SMBs
-- ops leaders
-- support and sales teams
+.PHONY: run install check help

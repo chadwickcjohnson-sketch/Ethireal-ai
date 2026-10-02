@@ -1,43 +1,40 @@
-#!/usr/bin/env python3
-"""Basic self-healing watchdog for the Ethireal AI service."""
+#!/usr/bin/env bash
+set -euo pipefail
 
-from __future__ import annotations
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
 
-import os
-import subprocess
-import sys
-import time
-from pathlib import Path
+APP_ENV="${APP_ENV:-development}"
+APP_DEBUG="${APP_DEBUG:-true}"
+APP_HOST="${APP_HOST:-0.0.0.0}"
+APP_PORT="${APP_PORT:-8000}"
+RESTART_WAIT_SECONDS="${RESTART_WAIT_SECONDS:-3}"
 
-ROOT = Path(__file__).resolve().parent.parent
+if [ ! -d ".venv" ]; then
+  echo "[Ethireal AI] Creating virtual environment..."
+  python3 -m venv .venv
+fi
 
+# shellcheck source=/dev/null
+source .venv/bin/activate
+python -m pip install --upgrade pip >/dev/null 2>&1 || true
+python -m pip install -r requirements.txt >/dev/null 2>&1 || true
 
-def run_service() -> None:
-    cmd = [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-    with subprocess.Popen(cmd, cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True) as proc:
-        try:
-            for line in proc.stdout:
-                print(line, end="")
-                if "Traceback" in line:
-                    raise RuntimeError("Service failed to start cleanly")
-        finally:
-            if proc.poll() is None:
-                proc.terminate()
+export APP_ENV APP_DEBUG APP_HOST APP_PORT
 
+if [ "${APP_DEBUG,,}" = "true" ]; then
+  RELOAD_FLAG="--reload"
+else
+  RELOAD_FLAG=""
+fi
 
-def main() -> int:
-    attempts = 0
-    while attempts < 5:
-        try:
-            run_service()
-            return 0
-        except Exception as exc:
-            attempts += 1
-            print(f"Self-heal attempt {attempts}/5 failed: {exc}")
-            time.sleep(2)
-    print("Service could not self-heal. Manual intervention required.")
-    return 1
+launch_server() {
+  echo "[Ethireal AI] Starting service on ${APP_HOST}:${APP_PORT}"
+  exec python -m uvicorn app.main:app --host "$APP_HOST" --port "$APP_PORT" $RELOAD_FLAG
+}
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+while true; do
+  launch_server || true
+  echo "[Ethireal AI] Service exited unexpectedly. Restarting in ${RESTART_WAIT_SECONDS}s..."
+  sleep "$RESTART_WAIT_SECONDS"
+done

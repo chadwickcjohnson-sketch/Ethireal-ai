@@ -1,98 +1,17 @@
-from __future__ import annotations
+[Unit]
+Description=Ethireal AI self-starting service
+After=network.target
 
-from typing import Any, Dict, List
+[Service]
+Type=simple
+WorkingDirectory=/opt/ethireal-ai
+Environment=APP_ENV=development
+Environment=APP_DEBUG=true
+Environment=APP_HOST=0.0.0.0
+Environment=APP_PORT=8000
+ExecStart=/opt/ethireal-ai/scripts/start.sh
+Restart=always
+RestartSec=5
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
-from app.config import APP_DEBUG, APP_HOST, APP_NAME, APP_PORT
-from app.services.automation import AutomationOrchestrator
-from app.services.reporting import ReportingService
-from app.workflows import build_workflow_instance, list_workflows
-
-app = FastAPI(
-    title=APP_NAME,
-    version="0.1.0",
-    description="Ethireal AI operational workflow engine.",
-    debug=APP_DEBUG,
-)
-
-orchestrator = AutomationOrchestrator()
-reporting = ReportingService()
-workflow_history: List[Dict[str, Any]] = []
-
-
-class WorkflowRequest(BaseModel):
-    owner: str = Field(..., description="Owner or team responsible for the workflow.")
-    context: Dict[str, Any] = Field(default_factory=dict, description="Workflow context and execution data.")
-
-
-@app.get("/health")
-def health() -> Dict[str, Any]:
-    return {
-        "status": "ok",
-        "service": APP_NAME,
-        "mode": "operational",
-    }
-
-
-@app.get("/workflows")
-def get_workflows() -> Dict[str, Any]:
-    return {"workflows": list_workflows()}
-
-
-@app.post("/workflows/{workflow_name}")
-def run_workflow(workflow_name: str, payload: WorkflowRequest) -> Dict[str, Any]:
-    try:
-        workflow = build_workflow_instance(workflow_name, payload.owner, payload.context)
-    except ValueError as exc:
-        raise HTTPException(status_code=404, detail=str(exc)) from exc
-
-    workflow = orchestrator.run(workflow)
-    workflow_history.append({
-        "workflow_id": workflow.workflow_id,
-        "workflow_name": workflow.workflow_name,
-        "owner": workflow.owner,
-        "status": workflow.status,
-    })
-
-    return {
-        "workflow_id": workflow.workflow_id,
-        "status": workflow.status,
-        "summary": workflow.result,
-    }
-
-
-@app.get("/workflows/{workflow_id}/status")
-def workflow_status(workflow_id: str) -> Dict[str, Any]:
-    workflow = orchestrator.execution_log.get(workflow_id)
-    if workflow is None:
-        raise HTTPException(status_code=404, detail="Workflow not found")
-
-    return {
-        "workflow_id": workflow.workflow_id,
-        "workflow_name": workflow.workflow_name,
-        "owner": workflow.owner,
-        "status": workflow.status,
-        "steps": [
-            {
-                "name": step.name,
-                "action": step.action,
-                "status": step.status,
-                "details": step.details,
-            }
-            for step in workflow.steps
-        ],
-        "result": workflow.result,
-    }
-
-
-@app.get("/dashboard")
-def dashboard() -> Dict[str, Any]:
-    return reporting.dashboard_summary(workflow_history)
-
-
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run("app.main:app", host=APP_HOST, port=APP_PORT, reload=APP_DEBUG)
+[Install]
+WantedBy=multi-user.target
