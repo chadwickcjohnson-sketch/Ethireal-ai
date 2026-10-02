@@ -1,30 +1,23 @@
 # Ethireal AI Roadmap
 
-## Phase 1 — Foundation
-- define workflows and business use cases
-- design architecture and modular services
-- build workflow execution engine
-- create dashboard and status APIs
+## Phase 1: Foundation
+- validate workflows
+- stabilize API
+- define business use cases
+- implement self-healing startup support
 
-## Phase 2 — MVP
-- add real integrations
-- implement workflow templates for operations and support
-- create user and team context model
-- improve workflow analytics
+## Phase 2: MVP
+- add dashboard and analytics
+- connect more workflows
+- support user ownership and task routing
 
-## Phase 3 — Scaling
-- multi-agent orchestration
-- business memory and personalization
-- advanced reporting
-- deployment automation
+## Phase 3: Scale
+- add DB and persistence
+- integrate external tools
+- add authentication
+- enable multi-user operations
 
-## Phase 4 — Commercialization
-- hosted SaaS launch
-- enterprise setup and onboarding
-- white-label distribution
-- premium support and consulting
-
-## Success metrics
-- reduced manual operations load
-- faster execution across workflows
-- measurable business automation ROI
+## Phase 4: Commercialization
+- launch hosted SaaS
+- offer premium deployments
+- white-label options for agencies

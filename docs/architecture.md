@@ -1,16 +1,13 @@
-run:
-	uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+#!/usr/bin/env bash
+set -euo pipefail
 
-install:
-	python -m pip install -r requirements.txt
+cd "$(dirname "$0")/.."
 
-check:
-	python -m compileall app
+if [ ! -d .venv ]; then
+  python -m venv .venv
+fi
 
-help:
-	@echo "Available commands:"
-	@echo "  make install"
-	@echo "  make run"
-	@echo "  make check"
+source .venv/bin/activate || true
+pip install -r requirements.txt >/dev/null 2>&1 || true
 
-.PHONY: run install check help
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000

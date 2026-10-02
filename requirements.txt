@@ -23,7 +23,7 @@ workflow_history: List[Dict[str, Any]] = []
 
 
 class WorkflowRequest(BaseModel):
-    owner: str = Field(..., description="Owner or team responsible for the workflow.")
+    owner: str = Field(..., description="Owner or team responsible for workflow execution.")
     context: Dict[str, Any] = Field(default_factory=dict, description="Workflow context and execution data.")
 
 
@@ -90,6 +90,13 @@ def workflow_status(workflow_id: str) -> Dict[str, Any]:
 @app.get("/dashboard")
 def dashboard() -> Dict[str, Any]:
     return reporting.dashboard_summary(workflow_history)
+
+
+@app.on_event("startup")
+def startup_event() -> None:
+    # self-heal startup check: ensure the service environment is operational
+    if not APP_HOST or not APP_PORT:
+        raise RuntimeError("Invalid runtime configuration")
 
 
 if __name__ == "__main__":

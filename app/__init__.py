@@ -1,41 +1,6 @@
-# Ethireal AI Operations Guide
+# Investor Summary
 
-## Local execution
+Ethireal AI is an AI-powered business automation platform. It solves a real operational problem: fragmented work and manual coordination across business teams. The product can be monetized through SaaS, enterprise deployment, onboarding, custom workflow design, and white-label services.
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+The repo is structured as a functional startup foundation with a workflow engine, API layer, operational docs, and business positioning.
 
-## Docker
-
-```bash
-docker build -t ethireal-ai .
-docker run -p 8000:8000 ethireal-ai
-```
-
-## Workflow execution flow
-
-1. Define a workflow name
-2. Pass owner and context payload
-3. Orchestrator executes steps
-4. Status and summary are returned
-5. Dashboard can summarize operational health
-
-## Operational principles
-
-- keep workflows clear and modular
-- assign ownership to each business task
-- treat automation as an execution layer, not just a prompt wrapper
-- measure success using workflow completion and business impact
-
-## Business use
-
-Useful for tasks like:
-- internal daily briefings
-- lead routing
-- issue prioritization
-- project operations oversight
-- recurring business tasks

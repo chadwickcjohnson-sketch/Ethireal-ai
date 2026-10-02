@@ -2,54 +2,24 @@
 
 ## Overview
 
-Ethireal AI is designed as a modular AI workflow system for business operations and execution.
+Ethireal AI is a modular AI business automation platform designed to convert operational tasks into managed workflows.
 
-## Layers
+## Core layers
 
-### 1. Interface layer
-- dashboard
-- admin console
-- workflow trigger endpoints
-- API access
-
-### 2. Orchestration layer
-- workflow routing
-- task scheduling
-- context mapping
-- execution control
-
-### 3. Intelligence layer
-- AI planning
-- summarization
+- interface and API
+- orchestration and routing
+- workflow execution
 - decision support
-- business logic evaluation
+- integration and context layer
+- reporting and analytics
 
-### 4. Integration layer
-- CRM tools
-- support systems
-- communication tools
-- internal data sources
+## High-value business flows
 
-### 5. Memory layer
-- task history
-- user context
-- workflow metadata
-- business signals
+- executive briefings
+- lead qualification
+- support triage
+- operations coordination
 
-### 6. Analytics layer
-- KPI tracking
-- business health metrics
-- workflow feedback
-- automation optimization
+## End goal
 
-## Example agents
-
-- executive assistant
-- sales pipeline agent
-- support triage agent
-- operations coordinator
-- reporting and insights agent
-
-## Goal
-
-Create a connected business automation system rather than a standalone chatbot.
+Create an AI-native business operating system that can guide, execute, and report on operational work.
