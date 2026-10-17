@@ -1,0 +1,47 @@
+:root {
+  --bg: #08131f;
+  --panel: #122435;
+  --panel-strong: #16314d;
+  --text: #e8f1f8;
+  --muted: #b6c4d1;
+  --accent: #74d0ff;
+  --accent-strong: #43a8df;
+  --border: rgba(255,255,255,0.08);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--accent); text-decoration: none; }
+.container { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
+.topbar { background: rgba(7, 18, 28, 0.92); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.nav { display: flex; justify-content: space-between; align-items: center; min-height: 68px; }
+.brand { font-size: 1.35rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+nav { display: flex; gap: 1rem; }
+nav a { color: var(--muted); }
+.hero { padding: 5rem 0 4rem; background: linear-gradient(180deg, rgba(17,35,52,0.8), rgba(8,19,31,1)); }
+.split { display: grid; grid-template-columns: 1.4fr 0.9fr; gap: 2rem; align-items: center; }
+.eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.72rem; }
+h1 { font-size: clamp(2.3rem, 4vw, 4rem); margin: 0.2rem 0 1rem; }
+h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+h3 { margin-top: 0; }
+.lead { color: var(--muted); line-height: 1.7; max-width: 60ch; }
+.cta-row { display: flex; gap: 1rem; margin-top: 1.5rem; }
+.btn { display: inline-block; padding: 0.9rem 1.35rem; border-radius: 999px; border: 1px solid var(--border); }
+.btn.primary { background: var(--accent); color: #06131d; font-weight: 700; }
+.btn.secondary { background: transparent; color: var(--text); }
+.card, .feature { background: rgba(18,36,53,0.9); border: 1px solid var(--border); border-radius: 16px; padding: 1.4rem; }
+.section { padding: 4rem 0; }
+.grid.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.feature { min-height: 220px; }
+.page { padding: 4rem 0; }
+.narrow { max-width: 760px; }
+.doc-list { display: grid; gap: 0.85rem; margin-top: 1.25rem; }
+.doc-item { background: rgba(18,36,53,0.9); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; }
+.doc-item small { color: var(--muted); }
+.footer { border-top: 1px solid var(--border); padding: 1.5rem 0 2rem; color: var(--muted); }
+@media (max-width: 760px) {
+  .split, .grid.three { grid-template-columns: 1fr; }
+  nav { gap: 0.7rem; font-size: 0.9rem; }
+  .nav { flex-wrap: wrap; gap: 0.5rem; padding: 0.8rem 0; }
+  .cta-row { flex-direction: column; }
+}
